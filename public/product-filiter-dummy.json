@@ -1,0 +1,127 @@
+{
+  "Data": {
+    "Products": [
+      {
+        "ProductName": "Product 1",
+        "Stock": true,
+        "Price": 100000,
+        "Image": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/34/IPhone_12_Blue.svg/800px-IPhone_12_Blue.svg.png",
+        "CategoryID": 1,
+        "Filters": [
+          {
+            "Filter": 1,
+            "Option": 1
+          },
+          {
+            "Filter": 2,
+            "Option": 5
+          },
+          {
+            "Filter": 3,
+            "Option": 7
+          }
+        ]
+      },
+      {
+        "ProductName": "Product 2",
+        "Stock": true,
+        "Price": 200000,
+        "Image": "https://upload.wikimedia.org/wikipedia/commons/2/25/M2_Macbook_Air_Midnight_model_-_1.jpg",
+        "CategoryID": 2,
+        "Filters": [
+          {
+            "Filter": 1,
+            "Option": 2
+          },
+          {
+            "Filter": 2,
+            "Option": 3
+          }
+        ]
+      },
+      {
+        "ProductName": "Product 3",
+        "Stock": false,
+        "Price": 300000,
+        "Image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/AirPods_%28cropped%29.jpg/1920px-AirPods_%28cropped%29.jpg",
+        "CategoryID": 2,
+        "Filters": [
+          {
+            "Filter": 1,
+            "Option": 2
+          },
+          {
+            "Filter": 2,
+            "Option": 5
+          },
+          {
+            "Filter": 2,
+            "Option": 5
+          }
+        ]
+      }
+    ],
+    "Filters": [
+      {
+        "FilterID": 1,
+        "FilterName": "Filter 1",
+        "Options": [
+          {
+            "OptionID": 1,
+            "OptionName": "Option A"
+          },
+          {
+            "OptionID": 2,
+            "OptionName": "Option B"
+          }
+        ]
+      },
+      {
+        "FilterID": 2,
+        "FilterName": "Filter 2",
+        "Options": [
+          {
+            "OptionID": 3,
+            "OptionName": "Option C"
+          },
+          {
+            "OptionID": 4,
+            "OptionName": "Option D"
+          },
+          {
+            "OptionID": 5,
+            "OptionName": "Option E"
+          }
+        ]
+      },
+      {
+        "FilterID": 3,
+        "FilterName": "Filter 3",
+        "Options": [
+          {
+            "OptionID": 3,
+            "OptionName": "Option F"
+          },
+          {
+            "OptionID": 4,
+            "OptionName": "Option G"
+          },
+          {
+            "OptionID": 5,
+            "OptionName": "Option H"
+          }
+        ]
+      }
+    ],
+    "Categories": [
+      {
+        "CategoryID": 1,
+        "CategoryName": "Category-1"
+      },
+      {
+        "CategoryID": 2,
+        "CategoryName": "Category-2"
+      }
+    ]
+  }
+}
