@@ -1,5 +1,4 @@
 import { Product } from "@/types/product-filter.type";
-import { Autour_One } from "next/font/google";
 import Image from "next/image";
 
 type ProductsProps = {
@@ -10,7 +9,7 @@ const Products: React.FC<ProductsProps> = ({ products }) => {
   return (
     <>
       <h1 className="text-3xl font-extrabold">Products</h1>
-      <div className="flex justify-center items-center ">
+      <div className="flex-1 flex justify-center items-center max-w-md gap-10 ">
         {products.map((product) => (
           <div key={product.ProductName} className="container ">
             <h3 className="text-xl">{product.ProductName}</h3>
