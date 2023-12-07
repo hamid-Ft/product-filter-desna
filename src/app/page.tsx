@@ -5,6 +5,7 @@ import Filters from "./_components/filters/filters";
 import React, { useEffect, useState } from "react";
 import { Category, Filter, Product } from "@/types/product-filter.type";
 import { GET } from "./api/route";
+
 export default function Home() {
   const [ProductsData, setProductsData] = useState<Product[]>([]);
   const [CategoriesData, setCategoriesData] = useState<Category[]>([]);
@@ -15,6 +16,23 @@ export default function Home() {
   >([]);
 
   useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const categoryParam = params.get("category");
+    const filterParam = params.get("filter");
+
+    if (categoryParam) {
+      const categories = categoryParam.split(",").map(Number);
+      setSelectedCategories(categories);
+    }
+
+    if (filterParam) {
+      const filters = filterParam.split(",").map((filter) => {
+        const [filterId, optionId] = filter.split("-").map(Number);
+        return { filter: filterId, option: optionId };
+      });
+      setSelectedFilters(filters);
+    }
+
     GET().then(({ Data: { Products, Categories, Filters } }) => {
       setProductsData(Products);
       setCategoriesData(Categories);
@@ -45,6 +63,7 @@ export default function Home() {
         <div className="categories bg-red-400">
           <Categories
             categories={CategoriesData}
+            selectedCategories={selectedCategories}
             setSelectedCategories={setSelectedCategories}
           />
           <p className="text-red-500">{selectedCategories}</p>
@@ -57,6 +76,7 @@ export default function Home() {
         <div className="filters bg-green-500">
           <Filters
             filters={FlitersData}
+            selectedFilters={selectedFilters}
             setSelectedFilters={setSelectedFilters}
           />
         </div>
