@@ -1,46 +1,20 @@
-import { Category } from "@/types/product-filter.type";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useStore } from "@/stores/productsStore";
+import { useUpdateUrl } from "@/hooks/navigationUtils";
 
-interface CategoriesProps {
-  categories: Category[];
-  selectedCategories: number[];
-  setSelectedCategories: React.Dispatch<React.SetStateAction<number[]>>;
-}
-
-const Categories: React.FC<CategoriesProps> = ({
-  categories,
-  selectedCategories,
-  setSelectedCategories,
-}) => {
-  const { replace } = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  function handleUrl(term: string) {
-    const params = new URLSearchParams(searchParams);
-    if (term) {
-      params.set("category", term);
-    } else {
-      params.delete("category");
-    }
-    replace(`${pathname}?${params.toString()}`);
-  }
+const Categories: React.FC = () => {
+  const { categories, selectedCategories, setSelectedCategories } = useStore();
+  const updateUrl = useUpdateUrl();
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const categoryId = Number(event.target.value);
+    let newCategories = [];
     if (event.target.checked) {
-      setSelectedCategories((prev) => {
-        const newCategories = [...prev, categoryId];
-        handleUrl(newCategories.join(","));
-        return newCategories;
-      });
+      newCategories = [...selectedCategories, categoryId];
     } else {
-      setSelectedCategories((prev) => {
-        const newCategories = prev.filter((id) => id !== categoryId);
-        handleUrl(newCategories.join(","));
-        return newCategories;
-      });
+      newCategories = selectedCategories.filter((id) => id !== categoryId);
     }
+    updateUrl("category", newCategories);
+    setSelectedCategories(newCategories);
   };
-
   return (
     <>
       <h2>Categories</h2>
