@@ -1,16 +1,32 @@
-import { Product } from "@/types/product-filter.type";
+import { useStore } from "@/stores/productsStore";
 import Image from "next/image";
 
-type ProductsProps = {
-  products: Product[];
-};
+const Products: React.FC = () => {
+  const { products, selectedCategories, selectedFilters } = useStore();
 
-const Products: React.FC<ProductsProps> = ({ products }) => {
+  const filteredByCategory =
+    selectedCategories.length > 0
+      ? products.filter((product) =>
+          selectedCategories.includes(product.CategoryID)
+        )
+      : products;
+
+  const filteredProducts =
+    selectedFilters.length > 0
+      ? filteredByCategory.filter((product) =>
+          product.Filters.some((f) =>
+            selectedFilters.find(
+              (sf) => sf.filter === f.Filter && sf.option === f.Option
+            )
+          )
+        )
+      : filteredByCategory;
+
   return (
     <>
       <h1 className="text-3xl font-extrabold">Products</h1>
       <div className="flex-1 flex justify-center items-center max-w-md gap-10 ">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <div key={product.ProductName} className="container ">
             <h3 className="text-xl">{product.ProductName}</h3>
             <Image

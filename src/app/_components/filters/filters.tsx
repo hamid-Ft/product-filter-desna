@@ -1,50 +1,25 @@
-import { Filter } from "@/types/product-filter.type";
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useStore } from "@/stores/productsStore";
+import { useUpdateUrl } from "@/hooks/navigationUtils";
 
-type FiltersProps = {
-  filters: Filter[];
-  selectedFilters: { filter: number; option: number }[];
-  setSelectedFilters: React.Dispatch<
-    React.SetStateAction<{ filter: number; option: number }[]>
-  >;
-};
+const Filters: React.FC = () => {
+  const { filters, selectedFilters, setSelectedFilters } = useStore();
+  const updateUrl = useUpdateUrl();
 
-const Filters: React.FC<FiltersProps> = ({
-  filters,
-  selectedFilters,
-  setSelectedFilters,
-}) => {
-  const { replace } = useRouter();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  function handleUrl(term: string) {
-    const params = new URLSearchParams(searchParams);
-    if (term) {
-      params.set("filter", term);
-    } else {
-      params.delete("filter");
-    }
-    replace(`${pathname}?${params.toString()}`);
-  }
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const filterId = Number(event.target.name.split("-")[1]);
     const optionId = Number(event.target.value);
+    let newFilters = [];
     if (event.target.checked) {
-      setSelectedFilters((prev) => {
-        const newFilters = [...prev, { filter: filterId, option: optionId }];
-        handleUrl(newFilters.map((f) => `${f.filter}-${f.option}`).join(","));
-        return newFilters;
-      });
+      newFilters = [...selectedFilters, { filter: filterId, option: optionId }];
     } else {
-      setSelectedFilters((prev) => {
-        const newFilters = prev.filter(
-          (f) => f.filter !== filterId || f.option !== optionId
-        );
-        handleUrl(newFilters.map((f) => `${f.filter}-${f.option}`).join(","));
-        return newFilters;
-      });
+      newFilters = selectedFilters.filter(
+        (f) => f.filter !== filterId || f.option !== optionId
+      );
     }
+    updateUrl("filter", newFilters);
+    setSelectedFilters(newFilters);
   };
+
   return (
     <>
       <h2>Filters</h2>
