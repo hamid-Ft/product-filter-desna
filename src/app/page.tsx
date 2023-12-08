@@ -38,20 +38,26 @@ export default function Home() {
       setCategories(Categories);
       setFilters(Filters);
     });
-  }, []);
+  }, [
+    setCategories,
+    setFilters,
+    setProducts,
+    setSelectedCategories,
+    setSelectedFilters,
+  ]);
 
   return (
     <>
-      <div className="grid grid-cols-[1fr_3fr] grid-rows-[1fr_3fr] gap-4">
-        <div className="categories bg-red-400">
+      <div className="grid grid-cols-[1fr_3fr] grid-rows-[1fr_3fr] gap-2 m-2 h-screen max-h-[96vh]  ">
+        <div className="categories bg-red-400 border-4 border-black rounded-2xl">
           <Categories />
         </div>
         <div
-          className="product bg-blue-500
+          className="product bg-blue-500 border-4 border-black rounded-2xl row-span-2
         ">
           <Products />
         </div>
-        <div className="filters bg-green-500">
+        <div className="filters bg-green-500 border-4 border-black rounded-2xl">
           <Filters />
         </div>
       </div>

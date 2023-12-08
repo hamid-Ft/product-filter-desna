@@ -16,12 +16,23 @@ const Categories: React.FC = () => {
     setSelectedCategories(newCategories);
   };
   return (
-    <>
-      <h2>Categories</h2>
-      <div className="flex flex-col">
+    <div className="flex flex-col h-full justify-evenly items-center">
+      <h2 className="py-2 font-bold text-lg border-b-4 w-full border-black text-center">
+        Categories
+      </h2>
+      <div
+        className="flex flex-col h-full
+       w-full text-center justify-center items-center">
         {categories.map((category) => (
-          <label key={category.CategoryName} className="">
+          <label
+            key={category.CategoryName}
+            className={`transition-colors duration-200 ease-in-out ${
+              selectedCategories.includes(category.CategoryID)
+                ? "bg-yellow-300"
+                : ""
+            } py-1 my-1 border-2 border-black rounded-2xl w-2/3 font-semibold cursor-pointer`}>
             <input
+              className="opacity-0 absolute"
               type="checkbox"
               name={category.CategoryName}
               id={category.CategoryName}
@@ -33,7 +44,7 @@ const Categories: React.FC = () => {
           </label>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
