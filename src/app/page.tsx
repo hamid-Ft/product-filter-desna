@@ -3,8 +3,8 @@ import Categories from "./_components/categories/categories";
 import Products from "./_components/products/products";
 import Filters from "./_components/filters/filters";
 import React, { useEffect } from "react";
-import { GET } from "../api/route";
 import { useStore } from "@/stores/productsStore";
+import { getData } from "@/api/route";
 
 export default function Home() {
   const {
@@ -33,7 +33,7 @@ export default function Home() {
       setSelectedFilters(filters);
     }
 
-    GET().then(({ Data: { Products, Categories, Filters } }) => {
+    getData().then(({ Data: { Products, Categories, Filters } }) => {
       setProducts(Products);
       setCategories(Categories);
       setFilters(Filters);
@@ -48,7 +48,7 @@ export default function Home() {
 
   return (
     <>
-      <div className="grid grid-cols-[1fr_3fr] grid-rows-[1fr_3fr] gap-2 m-2 h-screen max-h-[96vh]  ">
+      <div className="grid grid-cols-[1fr_5fr] grid-rows-[1fr_3fr] gap-2 m-2 h-screen max-h-[96vh]  ">
         <div className="categories bg-red-400 border-4 border-black rounded-2xl">
           <Categories />
         </div>
