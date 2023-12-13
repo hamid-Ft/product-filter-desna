@@ -5,16 +5,18 @@ const Filters: React.FC = () => {
   const { filters, selectedFilters, setSelectedFilters } = useStore();
   const updateUrl = useUpdateUrl();
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const filterId = Number(event.target.name.split("-")[1]);
-    const optionId = Number(event.target.value);
+  const handleCheckboxChange = (filterId: number, optionId: number) => {
     let newFilters = [];
-    if (event.target.checked) {
-      newFilters = [...selectedFilters, { filter: filterId, option: optionId }];
-    } else {
+    if (
+      selectedFilters.some(
+        (f) => f.filter === filterId && f.option === optionId
+      )
+    ) {
       newFilters = selectedFilters.filter(
         (f) => f.filter !== filterId || f.option !== optionId
       );
+    } else {
+      newFilters = [...selectedFilters, { filter: filterId, option: optionId }];
     }
     updateUrl("filter", newFilters);
     setSelectedFilters(newFilters);
@@ -35,7 +37,7 @@ const Filters: React.FC = () => {
             </p>
             <div className="flex flex-col w-full h-full text-center justify-center items-center">
               {filter.Options.map((option) => (
-                <label
+                <div
                   key={option.OptionID}
                   className={`transition-colors duration-200 ease-in-out ${
                     selectedFilters.some(
@@ -45,22 +47,12 @@ const Filters: React.FC = () => {
                     )
                       ? "bg-yellow-300"
                       : ""
-                  } my-1 p-1 border-2 border-black rounded-2xl w-2/3 font-semibold cursor-pointer flex flex-col justify-center`}>
-                  <input
-                    className="opacity-0 absolute"
-                    type="checkbox"
-                    name={`filter-${filter.FilterID}`}
-                    id={option.OptionName}
-                    value={option.OptionID}
-                    onChange={handleCheckboxChange}
-                    checked={selectedFilters.some(
-                      (f) =>
-                        f.filter === filter.FilterID &&
-                        f.option === option.OptionID
-                    )}
-                  />
+                  } my-1 p-1 border-2 border-black rounded-2xl w-2/3 font-semibold cursor-pointer flex flex-col justify-center`}
+                  onClick={() =>
+                    handleCheckboxChange(filter.FilterID, option.OptionID)
+                  }>
                   {option.OptionName}
-                </label>
+                </div>
               ))}
             </div>
           </div>
