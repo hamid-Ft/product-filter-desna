@@ -23,7 +23,7 @@ export const useUpdateUrl = () => {
             const option = filterOptions.find(
               (option) => option.OptionID === f.option
             );
-            return option ? option.OptionName : "";
+            return option ? option.OptionName.replace(/\s/g, "") : "";
           })
           .join(",");
       } else {
