@@ -5,6 +5,7 @@ import Filters from "./_components/filters/filters";
 import React, { useEffect } from "react";
 import { GET } from "../api/route";
 import { useStore } from "@/stores/productsStore";
+import { usePathname } from "next/navigation";
 
 export default function Home() {
   const {
@@ -14,6 +15,7 @@ export default function Home() {
     setSelectedFilters,
     setSelectedCategories,
   } = useStore();
+  const pathname = usePathname();
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -39,6 +41,7 @@ export default function Home() {
       setFilters(Filters);
     });
   }, [
+    pathname,
     setCategories,
     setFilters,
     setProducts,
