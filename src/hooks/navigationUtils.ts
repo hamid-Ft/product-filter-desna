@@ -15,30 +15,31 @@ export const useUpdateUrl = () => {
     filterOptions: Option[] // Add this parameter
   ) => {
     let paramsString: string;
+    const urlParams = new URLSearchParams(window.location.search);
+
     if (Array.isArray(paramsValues)) {
       if (typeof paramsValues[0] === "object") {
-        paramsString = (paramsValues as { filter: number; option: number }[])
-          .map((f) => {
-            // Find the option with the matching ID and return its name
-            const option = filterOptions.find(
-              (option) => option.OptionID === f.option
-            );
-            return option ? option.OptionName.replace(/\s/g, "") : "";
-          })
-          .join(",");
-      } else {
-        paramsString = paramsValues.join(",");
+        paramsValues = (
+          paramsValues as { filter: number; option: number }[]
+        ).map((f) => {
+          // Find the option with the matching ID and return its name
+          const option = filterOptions.find(
+            (option) => option.OptionID === f.option
+          );
+          return option ? option.OptionName.replace(/\s/g, "-") : "";
+        });
       }
+
+      // Remove all previous values for this key
+      urlParams.delete(paramsKey);
+
+      // Append each value separately
+      paramsValues.forEach((value) => {
+        urlParams.append(paramsKey, value.toString());
+      });
     } else {
       paramsString = paramsValues.toString();
-    }
-
-    const urlParams = new URLSearchParams(window.location.search);
-    urlParams.delete(paramsKey);
-    if (paramsString.length > 0) {
-      paramsString
-        .split(",")
-        .forEach((value) => urlParams.append(paramsKey, value));
+      urlParams.set(paramsKey, paramsString);
     }
 
     const newUrl = `${pathname}?${urlParams.toString()}`;

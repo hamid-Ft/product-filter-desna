@@ -6,18 +6,17 @@ const Filters: React.FC = () => {
   const updateUrl = useUpdateUrl();
 
   const handleCheckboxChange = (filterId: number, optionId: number) => {
-    let newFilters = [];
-    if (
-      selectedFilters.some(
-        (f) => f.filter === filterId && f.option === optionId
-      )
-    ) {
-      newFilters = selectedFilters.filter(
-        (f) => f.filter !== filterId || f.option !== optionId
-      );
+    let newFilters = [...selectedFilters];
+    const existingFilterIndex = newFilters.findIndex(
+      (f) => f.filter === filterId && f.option === optionId
+    );
+
+    if (existingFilterIndex !== -1) {
+      newFilters.splice(existingFilterIndex, 1);
     } else {
-      newFilters = [...selectedFilters, { filter: filterId, option: optionId }];
+      newFilters.push({ filter: filterId, option: optionId });
     }
+
     updateUrl(
       "filter",
       newFilters,
@@ -25,7 +24,6 @@ const Filters: React.FC = () => {
     );
     setSelectedFilters(newFilters);
   };
-
   return (
     <div className="flex flex-col justify-start items-center h-full">
       <h2 className="py-2 font-extrabold text-lg border-b-2 w-full border-black text-center">
