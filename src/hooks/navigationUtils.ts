@@ -1,9 +1,9 @@
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { Option } from "@/types/product-filter.type";
+import { useRouter, usePathname } from "next/navigation";
 
 export const useUpdateUrl = () => {
   const { replace } = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
   const updateUrl = (
     paramsKey: string,
@@ -11,14 +11,20 @@ export const useUpdateUrl = () => {
       | string
       | number
       | (string | number)[]
-      | { filter: number; option: number }[]
+      | { filter: number; option: number }[],
+    filterOptions: Option[] // Add this parameter
   ) => {
-    const params = new URLSearchParams(searchParams);
     let paramsString: string;
     if (Array.isArray(paramsValues)) {
       if (typeof paramsValues[0] === "object") {
         paramsString = (paramsValues as { filter: number; option: number }[])
-          .map((f) => `${f.filter}-${f.option}`)
+          .map((f) => {
+            // Find the option with the matching ID and return its name
+            const option = filterOptions.find(
+              (option) => option.OptionID === f.option
+            );
+            return option ? option.OptionName : "";
+          })
           .join(",");
       } else {
         paramsString = paramsValues.join(",");
@@ -27,14 +33,17 @@ export const useUpdateUrl = () => {
       paramsString = paramsValues.toString();
     }
 
-    if (paramsString) {
-      params.set(paramsKey, paramsString);
-    } else {
-      params.delete(paramsKey);
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.delete(paramsKey);
+    if (paramsString.length > 0) {
+      paramsString
+        .split(",")
+        .forEach((value) => urlParams.append(paramsKey, value));
     }
 
-    replace(`${pathname}?${params.toString()}`);
-  };
+    const newUrl = `${pathname}?${urlParams.toString()}`;
 
+    replace(newUrl);
+  };
   return updateUrl;
 };

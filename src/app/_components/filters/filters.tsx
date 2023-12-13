@@ -18,7 +18,11 @@ const Filters: React.FC = () => {
     } else {
       newFilters = [...selectedFilters, { filter: filterId, option: optionId }];
     }
-    updateUrl("filter", newFilters);
+    updateUrl(
+      "filter",
+      newFilters,
+      filters.flatMap((f) => f.Options)
+    );
     setSelectedFilters(newFilters);
   };
 

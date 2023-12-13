@@ -5,13 +5,13 @@ const Categories: React.FC = () => {
   const { categories, selectedCategories, setSelectedCategories } = useStore();
   const updateUrl = useUpdateUrl();
   const handleCheckboxChange = (categoryId: number) => {
-    let newCategories = [];
+    let newCategories: number[] = [];
     if (selectedCategories.includes(categoryId)) {
       newCategories = selectedCategories.filter((id) => id !== categoryId);
     } else {
       newCategories = [...selectedCategories, categoryId];
     }
-    updateUrl("category", newCategories);
+    updateUrl("category", newCategories, []);
     setSelectedCategories(newCategories);
   };
   return (
