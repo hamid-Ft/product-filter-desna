@@ -20,9 +20,7 @@ const Categories: React.FC = () => {
       <h2 className="py-2 font-bold text-lg border-b-4 w-full border-black text-center">
         Categories
       </h2>
-      <div
-        className="flex flex-col h-full
-       w-full text-center justify-center items-center">
+      <div className="flex flex-col h-full w-full text-center justify-center items-center">
         {categories.map((category) => (
           <label
             key={category.CategoryName}

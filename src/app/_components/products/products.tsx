@@ -14,9 +14,9 @@ const Products: React.FC = () => {
   const filteredProducts =
     selectedFilters.length > 0
       ? filteredByCategory.filter((product) =>
-          product.Filters.some((f) =>
-            selectedFilters.find(
-              (sf) => sf.filter === f.Filter && sf.option === f.Option
+          selectedFilters.every((sf) =>
+            product.Filters.some(
+              (f) => sf.filter === f.Filter && sf.option === f.Option
             )
           )
         )

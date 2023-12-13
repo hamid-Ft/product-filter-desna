@@ -66,10 +66,7 @@
         "FilterID": 1,
         "FilterName": "Filter 1",
         "Options": [
-          {
-            "OptionID": 1,
-            "OptionName": "Option A"
-          },
+          { "OptionID": 1, "OptionName": "Option A" },
           {
             "OptionID": 2,
             "OptionName": "Option B"
@@ -114,10 +111,8 @@
       }
     ],
     "Categories": [
-      {
-        "CategoryID": 1,
-        "CategoryName": "Category-1"
-      },
+      { "CategoryID": 1, "CategoryName": "Category-1" },
+
       {
         "CategoryID": 2,
         "CategoryName": "Category-2"
