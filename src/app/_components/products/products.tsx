@@ -1,7 +1,5 @@
 import {
   Chip,
-  Tab,
-  Tabs,
   Card,
   CardBody,
   Modal,
@@ -11,28 +9,24 @@ import {
   ModalFooter,
   Button,
 } from "@nextui-org/react";
-import { usePathname, useSearchParams, useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useStore } from "@/stores/productsStore";
 import Image from "next/image";
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 const Products: React.FC = () => {
   const { products, selectedCategories, selectedFilters } = useStore();
   const [openModal, setOpenModal] = React.useState<string | null>(null);
   const [prevUrl, setPrevUrl] = React.useState<string | null>(null);
   const pathname = usePathname();
   const router = useRouter();
-  const searchParams = useSearchParams()!;
   const [currentSlide, setCurrentSlide] = React.useState("details");
 
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams);
-      params.set(name, value);
+  const createQueryString = useCallback((name: string, value: string) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set(name, value);
 
-      return params.toString();
-    },
-    [searchParams]
-  );
+    return params.toString();
+  }, []);
 
   const handleNext = (productName: string) => {
     setCurrentSlide(currentSlide === "details" ? "options" : "details");
@@ -57,13 +51,11 @@ const Products: React.FC = () => {
         )
     );
   };
-  const handleOpenModal = (productName: string) => {
+  const handleOpenModal = (productName: string, slide: string) => {
     setPrevUrl(window.location.href);
     setTimeout(() => {
-      router.push(
-        pathname +
-          "?" +
-          createQueryString(productName.replace(" ", "-"), "details")
+      router.replace(
+        pathname + "?" + createQueryString(productName.replace(" ", "-"), slide)
       );
       setOpenModal(productName);
     }, 10);
@@ -71,7 +63,11 @@ const Products: React.FC = () => {
 
   const handleCloseModal = () => {
     if (prevUrl) {
-      window.history.replaceState({}, "", prevUrl);
+      const url = new URL(prevUrl);
+      if (openModal) {
+        url.searchParams.delete(openModal.replace(" ", "-"));
+      }
+      window.history.replaceState({}, "", url.toString());
     }
     setOpenModal(null);
   };
@@ -92,6 +88,20 @@ const Products: React.FC = () => {
           )
         )
       : filteredByCategory;
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productParam = Array.from(urlParams.keys()).find((key) =>
+      key.includes("Product")
+    );
+    const optionParam = urlParams.get(productParam || "");
+
+    if (productParam) {
+      const productName = productParam.replace("-", " ");
+      handleOpenModal(productName, optionParam || "details");
+      setCurrentSlide(optionParam || "details");
+    }
+  }, []);
 
   return (
     <div className="flex flex-col h-full w-full justify-start">
@@ -116,7 +126,10 @@ const Products: React.FC = () => {
             <p className="font-bold">{product.Price}$</p>
             <p className="font-semibold">{product.Stock ? "✔" : "❌"}</p>
             {product.Stock ? (
-              <Button onPress={() => handleOpenModal(product.ProductName)}>
+              <Button
+                onPress={() =>
+                  handleOpenModal(product.ProductName, currentSlide)
+                }>
                 Add
               </Button>
             ) : (
@@ -181,30 +194,6 @@ const Products: React.FC = () => {
                         Action
                       </Button>
                     </ModalFooter>
-
-                    {/* 
-                      <Tabs aria-label="Dynamic tabs" items={filteredProducts}>
-                        <Tab key="details" title="Details"></Tab>
-                        <Tab
-                          key="options"
-                          title="Options"
-                          href={`?${product.ProductName}-Options`}>
-                          <Card>
-                            <CardBody className="flex flex-row gap-2">
-                              <Chip>
-                                <span>CategoryID: </span>
-                                {product.CategoryID}
-                              </Chip>
-                              {product.Filters.map((f) => (
-                                <Chip key={f.Filter}>
-                                  <span>FilterID: {f.Filter} </span>
-                                  <span>OptionID: {f.Option} </span>
-                                </Chip>
-                              ))}
-                            </CardBody>
-                          </Card>
-                        </Tab>
-                      </Tabs> */}
                   </>
                 )}
               </ModalContent>
