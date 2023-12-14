@@ -2,11 +2,13 @@ import { Category, Filter, Product } from "@/types/product-filter.type";
 import { create } from "zustand";
 
 type State = {
+  isModalOpen: boolean;
   products: Product[];
   categories: Category[];
   filters: Filter[];
   selectedCategories: number[];
   selectedFilters: { filter: number; option: number }[];
+  setIsModalOpen: (isModalOpen: boolean) => void;
   setProducts: (products: Product[]) => void;
   setCategories: (categories: Category[]) => void;
   setFilters: (filters: Filter[]) => void;
@@ -17,6 +19,8 @@ type State = {
 };
 
 export const useStore = create<State>()((set) => ({
+  isModalOpen: false,
+  setIsModalOpen: (isModalOpen) => set({ isModalOpen }),
   products: [],
   categories: [],
   filters: [],
