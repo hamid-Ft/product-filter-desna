@@ -22,11 +22,7 @@ export const useUpdateUrl = () => {
         paramsValues = (
           paramsValues as { filter: number; option: number }[]
         ).map((f) => {
-          // Find the option with the matching ID and return its name
-          const option = filterOptions.find(
-            (option) => option.OptionID === f.option
-          );
-          return option ? option.OptionName.replace(/\s/g, "-") : "";
+          return `${f.filter}-${f.option}`;
         });
       }
 

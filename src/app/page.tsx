@@ -19,27 +19,25 @@ export default function Home() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const categoryParam = params.get("category");
-    const filterParam = params.get("filter");
-
-    if (categoryParam) {
-      const categories = categoryParam.split(",").map(Number);
-      setSelectedCategories(categories);
-    }
-
-    if (filterParam) {
-      const filters = filterParam.split(",").map((filter) => {
-        const [filterId, optionId] = filter.split("-").map(Number);
-        return { filter: filterId, option: optionId };
-      });
-      setSelectedFilters(filters);
-    }
+    const categoryParam = params.getAll("category");
+    const filterParam = params.getAll("filter");
 
     GET().then(({ Data: { Products, Categories, Filters } }) => {
       setProducts(Products);
       setCategories(Categories);
       setFilters(Filters);
+      if (categoryParam) {
+        const categories = categoryParam.map(Number);
+        setSelectedCategories(categories);
+      }
     });
+    if (filterParam.length > 0) {
+      const filters = filterParam.map((f: string) => {
+        const [filter, option] = f.split("-").map(Number);
+        return { filter, option };
+      });
+      setSelectedFilters(filters);
+    }
   }, [
     pathname,
     setCategories,
