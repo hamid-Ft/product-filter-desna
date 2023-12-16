@@ -135,7 +135,7 @@ const Products: React.FC = () => {
                   height={200}
                   className="object-contain aspect-square   m-3 rounded-xl"
                 />
-                <p className="font-bold">
+                <p className="font-bold my-2">
                   <span>Price: {product.Price}$</span>
                 </p>
                 <p className="font-semibold py-1">
